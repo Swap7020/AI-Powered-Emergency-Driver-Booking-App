@@ -7,7 +7,9 @@ import {
 import { trackingAPI } from '../services/api'
 import useAuthStore from '../store/authStore'
 
-const WS_BASE = 'ws://localhost:8000'
+// WebSocket URL — in production points to Render backend
+const WS_BASE = import.meta.env.VITE_WS_URL ||
+  (window.location.hostname === 'localhost' ? 'ws://localhost:8000' : `wss://${window.location.hostname}`)
 
 // Status timeline steps
 const STATUS_STEPS = [

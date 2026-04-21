@@ -7,7 +7,8 @@
 import { useState, useRef, useEffect } from 'react'
 import { Play, Square, Navigation } from 'lucide-react'
 
-const WS_BASE = 'ws://localhost:8000'
+const WS_BASE = import.meta.env.VITE_WS_URL ||
+  (window.location.hostname === 'localhost' ? 'ws://localhost:8000' : `wss://${window.location.hostname}`)
 
 export default function DriverSimulator({ bookingId, pickupLat, pickupLng, driverLat, driverLng }) {
   const [running, setRunning]   = useState(false)

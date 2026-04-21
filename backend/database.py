@@ -1,16 +1,24 @@
 """
-Database configuration — SQLite with SQLAlchemy ORM (sync engine for simplicity)
+Database configuration
+- Development: SQLite (./driver_app.db)
+- Production:  PostgreSQL (set DATABASE_URL env var on Render)
 """
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
 
-DATABASE_URL = "sqlite:///./driver_app.db"
+# Render sets DATABASE_URL automatically for PostgreSQL
+# Locally falls back to SQLite
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./driver_app.db")
 
-engine = create_engine(
-    DATABASE_URL,
-    connect_args={"check_same_thread": False},  # required for SQLite
-)
+# Render PostgreSQL URLs start with postgres:// — SQLAlchemy needs postgresql://
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
+# SQLite needs check_same_thread=False; PostgreSQL does not
+connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
+
+engine = create_engine(DATABASE_URL, connect_args=connect_args)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
@@ -19,7 +27,6 @@ class Base(DeclarativeBase):
 
 
 def get_db():
-    """Dependency — yields a DB session and closes it after use."""
     db = SessionLocal()
     try:
         yield db
@@ -28,22 +35,18 @@ def get_db():
 
 
 def init_db():
-    """Create all tables and seed dummy drivers."""
-    from backend.models import User, Customer, Driver, Booking  # noqa: F401
+    from backend.models import User, Customer, Driver, Booking  # noqa
     Base.metadata.create_all(bind=engine)
     _seed_drivers()
 
 
 def _seed_drivers():
-    """Insert sample drivers if none exist, or reset availability if they do."""
     import bcrypt
     from backend.models import Driver, User
 
     db = SessionLocal()
     try:
         existing = db.query(Driver).count()
-
-        # If drivers exist, just make sure they're all available
         if existing > 0:
             db.query(Driver).update({"availability": True})
             db.commit()
@@ -56,7 +59,6 @@ def _seed_drivers():
             {"name": "Priya Sharma", "phone": "9000000004", "lat": 12.9820, "lng": 77.5870, "rating": 4.9, "exp": 7, "lic": "KA04-2017-4567890"},
             {"name": "Kiran Rao",    "phone": "9000000005", "lat": 12.9600, "lng": 77.6100, "rating": 4.0, "exp": 1, "lic": "KA05-2022-5678901"},
         ]
-
         hashed_pw = bcrypt.hashpw(b"driver123", bcrypt.gensalt()).decode()
 
         for d in sample:
@@ -64,7 +66,6 @@ def _seed_drivers():
                         hashed_password=hashed_pw, role="driver")
             db.add(user)
             db.flush()
-
             driver = Driver(
                 user_id=user.id, name=d["name"], phone=d["phone"],
                 license_number=d["lic"], license_expiry="31/12/2030",

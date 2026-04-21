@@ -1,6 +1,7 @@
 """
 JWT authentication helpers — token creation, verification, and current-user dependency.
 """
+import os
 from datetime import datetime, timedelta
 from typing import Optional
 from jose import JWTError, jwt
@@ -12,7 +13,7 @@ from backend.database import get_db
 from backend.models import User
 
 # ── Config ────────────────────────────────────────────────────────────────────
-SECRET_KEY  = "driver-app-secret-key-2024-change-in-prod"
+SECRET_KEY  = os.getenv("SECRET_KEY", "driver-app-secret-key-2024-change-in-prod")
 ALGORITHM   = "HS256"
 TOKEN_EXPIRE_HOURS = 24
 
