@@ -1,25 +1,21 @@
 # Python
 __pycache__/
 *.py[cod]
-*.pyo
 *.egg-info/
-dist/
-build/
 
-# Virtual environment — never commit
+# Virtual environment
 venv/
 env/
 .venv/
 
-# Database files — never commit
+# Database
 *.db
 *.sqlite
 *.sqlite3
 
-# Environment secrets — never commit
+# Environment secrets
 .env
 .env.local
-.env.production
 
 # Logs
 *.log
@@ -28,14 +24,11 @@ env/
 .DS_Store
 Thumbs.db
 
-# Node / React — never commit
+# Node / React
 node_modules/
-react-frontend/node_modules/
 dist/
-react-frontend/dist/
 .vite/
 
 # IDE
 .vscode/
 .idea/
-*.swp

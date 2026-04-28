@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: ai-driver-booking-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
