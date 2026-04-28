@@ -7,9 +7,11 @@ import {
 import { trackingAPI } from '../services/api'
 import useAuthStore from '../store/authStore'
 
-// WebSocket URL — in production points to Render backend
-const WS_BASE = import.meta.env.VITE_WS_URL ||
-  (window.location.hostname === 'localhost' ? 'ws://localhost:8000' : `wss://${window.location.hostname}`)
+// WebSocket URL
+const WS_BASE = import.meta.env.VITE_WS_URL
+  || (window.location.hostname === 'localhost'
+      ? 'ws://localhost:8000'
+      : 'wss://ai-powered-emergency-driver-booking-api.onrender.com')
 
 // Status timeline steps
 const STATUS_STEPS = [

@@ -7,8 +7,10 @@
 import { useState, useRef, useEffect } from 'react'
 import { Play, Square, Navigation } from 'lucide-react'
 
-const WS_BASE = import.meta.env.VITE_WS_URL ||
-  (window.location.hostname === 'localhost' ? 'ws://localhost:8000' : `wss://${window.location.hostname}`)
+const WS_BASE = import.meta.env.VITE_WS_URL
+  || (window.location.hostname === 'localhost'
+      ? 'ws://localhost:8000'
+      : 'wss://ai-powered-emergency-driver-booking-api.onrender.com')
 
 export default function DriverSimulator({ bookingId, pickupLat, pickupLng, driverLat, driverLng }) {
   const [running, setRunning]   = useState(false)

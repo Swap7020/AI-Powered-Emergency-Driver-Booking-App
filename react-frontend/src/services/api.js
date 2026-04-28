@@ -1,8 +1,8 @@
 import axios from 'axios'
 
-// In production (Vercel), set VITE_API_URL to your Render backend URL
-// e.g. https://ai-driver-booking-api.onrender.com
-const BASE_URL = import.meta.env.VITE_API_URL || '/api'
+// Backend URL — Render deployment
+const BASE_URL = import.meta.env.VITE_API_URL
+  || 'https://ai-powered-emergency-driver-booking-api.onrender.com'
 
 const api = axios.create({ baseURL: BASE_URL })
 
