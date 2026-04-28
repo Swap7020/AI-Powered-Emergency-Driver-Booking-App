@@ -30,6 +30,8 @@ Thumbs.db
 
 # Node / React — never commit
 node_modules/
+react-frontend/node_modules/
+dist/
 react-frontend/dist/
 .vite/
 
